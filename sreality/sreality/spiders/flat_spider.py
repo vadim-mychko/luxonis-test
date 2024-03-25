@@ -15,6 +15,15 @@ class FlatSpider(Spider):
     def parse(self, response):
         data = json.loads(response.text)
         flats = data["_embedded"]["estates"]
+        scraped_data = {"data": []}
+
         for flat in flats:
             name = flat["name"]
-            img_url = flat["_links"]["images"][0]["href"]
+            url = flat["_links"]["images"][0]["href"]
+            scraped_data["data"].append({"name": name, "url": url})
+
+        filename = "scraped_data.json"
+        with open(filename, "w", encoding="utf-8") as file:
+            json.dump(scraped_data, file, indent=4)
+
+        self.log(f"Saved scraped data to the {filename}")
