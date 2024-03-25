@@ -13,6 +13,3 @@ class FlatSpider(Spider):
 
     def parse(self, response):
         data = json.loads(response.text)
-        filename = "data.txt"
-        Path(filename).write_bytes(data)
-        self.log(f"Saved file {filename}")
