@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Content from Database</title>
 </head>
 <body>
@@ -8,15 +9,13 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th> 
-                <th>Name</th> 
+                <th>Title</th> 
                 <th>Image</th> 
             </tr>
         </thead>
         <tbody>
             {% for row in data %}
             <tr>
-                <td>{{ row[0] }}</td> 
                 <td>{{ row[1] }}</td> 
                 <td><img src="{{ row[2] }}" alt="Image"></td> 
             </tr>
