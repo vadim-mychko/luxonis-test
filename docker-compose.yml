@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  # Setup the database
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: scrapy  
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: scrapy
+
+  # Perform scraping
+  scraper:
+    build: .
+    command: scrapy runspider /app/sreality/sreality/spiders/flat_spider.py
+    volumes:
+      - ./sreality:/app/sreality
+
+  # Update the database with the scraped data
+  updater:
+    build: .
+    command: python /app/src/update_database.py /app/scraped_data.json
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - db
+      - scraper
+
+  # Run the server
+  web:
+    build: .
+    command: python /app/src/server.py
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - updater
