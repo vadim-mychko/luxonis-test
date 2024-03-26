@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Image Display Server</title>
+    <title>Content from Database</title>
 </head>
 <body>
-    <h1>My Image</h1>
-    <img src="https://d18-a.sdn.cz/d_18/c_img_gR_0/Kr9C54.jpeg?fl=res,400,300,3|shr,,20|jpg,90" alt="My Image">
+    <h1>Database Table Content</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th> 
+                <th>Name</th> 
+                <th>Image</th> 
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td> 
+                <td>{{ row[1] }}</td> 
+                <td><img src="{{ row[2] }}" alt="Image"></td> 
+            </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
 </body>
 </html>
