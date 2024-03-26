@@ -6,7 +6,7 @@ from jinja2 import Environment, FileSystemLoader
 from config import DATABASE_CONFIG
 
 
-PORT = 8082
+PORT = 8080
 ENV = Environment(loader=FileSystemLoader("."))
 
 
@@ -23,17 +23,16 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         cur = conn.cursor()
         cur.execute("SELECT * FROM data")
         rows = cur.fetchall()
+        cur.close()
+        conn.close()
 
         template = ENV.get_template("index.html")
         content = template.render(data=rows)
-        
+
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write(bytes(content, "utf-8"))
-
-        cur.close()
-        conn.close()
 
 
 def main():
