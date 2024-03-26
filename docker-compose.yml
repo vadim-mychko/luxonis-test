@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-  # Setup the database
   db:
     image: postgres
     environment:
@@ -11,30 +10,12 @@ services:
     ports:
       - "5432:5432"
 
-  # Perform scraping
-  scraper:
+  server:
     build: .
-    command: scrapy runspider /app/src/flat_spider.py
-    volumes:
-      - ./src:/app/src
-
-  # Update the database with the scraped data
-  updater:
-    build: .
-    command: python /app/src/update_database.py /app/scraped_data.json
+    command: /bin/sh -c /app/src/run.sh
     volumes:
       - ./src:/app/src
     depends_on:
       - db
-      - scraper
-
-  # Run the server
-  web:
-    build: .
-    command: python /app/src/server.py
-    volumes:
-      - ./src:/app/src
     ports:
       - "8080:8080"
-    depends_on:
-      - updater
