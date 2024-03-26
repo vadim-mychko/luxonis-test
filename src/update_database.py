@@ -1,9 +1,10 @@
-import os
 import json
 import psycopg2
 from argparse import ArgumentParser
 from pathlib import Path
 from psycopg2.extras import execute_values
+
+from config import DATABASE_CONFIG
 
 
 def main():
@@ -12,14 +13,7 @@ def main():
     args = parser.parse_args()
     datapath = Path(args.datapath)
 
-    conn = psycopg2.connect(
-        database="scrapy",
-        user="mychkvad",
-        password=os.environ.get("SCRAPY_PASSWORD"),
-        host="localhost",
-        port="5432"
-    )
-
+    conn = psycopg2.connect(**DATABASE_CONFIG)
     cur = conn.cursor()
     cur.execute(
         """CREATE TABLE IF NOT EXISTS data (
